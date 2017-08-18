@@ -1,3 +1,4 @@
+
 // reverse linked list between node m to n
 
 #include <iostream>
@@ -28,7 +29,7 @@ int main()
   Insert(7);
   
   Print();
-  ReverseBetween(head, 2,7);
+  ReverseBetween(head, 1,3);
   Print();
   
   return 0;
@@ -39,55 +40,56 @@ void ReverseBetween(Node* &head, int m, int n)
   if(m < 1 || n < 1 || m >= n || head == NULL)
     return; // error
   
-  Node *p, *q, *x, *y;
-  int i = 0;
+  Node *p = NULL; //node before m
+  int i = 1;
   
-  if(m == 1)
-  {
-    p = NULL;
-    x = head;
-  }
-  else
+  //find node before m
+  if(m > 1)
   {
     p = head;
-    i = m - 2;
-    while(p && i--)
+        
+    while(p && i < m-1)
+    {
       p = p->next;
+      i++;
+    }
     
     if(p == NULL)
-      return; // m index incorrect
-    
-    x = p->next;
-    if(x == NULL)
-      return; //m incorrect
+      return; //m index out of bound
   }
   
-  y = x;
-  i = n - m;
-  while (y && i--)
-    y = y->next;
-
-  if(y == NULL)
-    return; //incorrect n
-
-  q = y->next;
-    
-  // now we got the boundries, lets reverse from x to y
+  // reverse the node from m to n
+  // fix boundries later
   
-  Node *c = x, *nx = NULL, *r = q;
-  while(c && c != q)
+  Node *c = p?p->next:head;
+  Node *nx = NULL, *r = NULL;
+  
+  i = m;
+  while(c && i <= n)
   {
     nx = c->next;
     c->next = r;
     r = c;
     c = nx;
+    i++;
   }
- 
-  if(p)
-    p->next = r;
-  else
-    head = r;
   
+  if(c == NULL && i <= n)
+    cout << "Total number of nodes is "<<i-1<<". Reversing from "<<m<<" to "<<i-1<<"\n";
+  
+  //fix boundries
+  if(p)
+  {
+    p->next->next = c;
+    p->next = r;
+  }
+  else
+  {
+    head->next = c;
+    head = r;
+  }
+   
+  return;
 }
 
 void Insert(int val)
@@ -116,4 +118,4 @@ void Print()
   }
   cout << "]\n";
 }
-    
+                 
